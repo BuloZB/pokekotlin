@@ -1,7 +1,7 @@
 package co.pokeapi.pokekotlin.test
 
-import co.pokeapi.pokekotlin.PokeApi
-import io.ktor.client.plugins.ClientRequestException
+import co.pokeapi.pokekotlin.createPokeApi
+import io.ktor.client.plugins.*
 import io.ktor.http.HttpStatusCode.Companion.NotFound
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -19,7 +19,7 @@ class FailureTest {
 
   @Test
   fun badUrlError() = runTest {
-    val result = PokeApi("https://localhost:12345/").getBerry(10)
+    val result = createPokeApi("https://localhost:12345/").getBerry(10)
     assertNotNull(result.exceptionOrNull())
   }
 }
