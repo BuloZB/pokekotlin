@@ -24,9 +24,9 @@ android {
 
   defaultConfig {
     applicationId = "co.pokeapi.pokekotlin.demoapp"
-    minSdk = 24
-    compileSdk = 35
-    targetSdk = 35
+    minSdk = 30
+    compileSdk = 36
+    targetSdk = 36
     versionCode = 1
     versionName = project.version.toString()
   }
@@ -74,36 +74,44 @@ kotlin {
 
     all { languageSettings { optIn("androidx.compose.material3.ExperimentalMaterial3Api") } }
 
-    commonMain.dependencies {
-      implementation(compose.components.resources)
-      implementation(compose.foundation)
-      implementation(compose.material3)
-      implementation(compose.runtime)
-      implementation(compose.ui)
-      implementation(libs.androidx.navigation.compose)
-      implementation(projects.pokekotlin)
+    commonMain {
+      dependencies {
+        implementation(compose.components.resources)
+        implementation(compose.foundation)
+        implementation(compose.material3)
+        implementation(compose.material3AdaptiveNavigationSuite)
+        implementation(compose.runtime)
+        implementation(compose.ui)
+
+        implementation(libs.androidx.navigation.compose)
+        implementation(libs.androidx.lifecycle.viewmodel.compose)
+        implementation(libs.coil.compose)
+        implementation(libs.coil.network.ktor3)
+
+        implementation(project.dependencies.platform(libs.koin.bom))
+        implementation(libs.koin.core)
+        implementation(libs.koin.compose)
+        implementation(libs.koin.composeViewmodel)
+        implementation(libs.koin.composeViewmodelNavigation)
+
+        implementation(projects.pokekotlin)
+      }
     }
 
     androidMain {
       dependencies {
         implementation(libs.androidx.activity.compose)
         implementation(libs.kotlinx.coroutines.android)
+        implementation(libs.koin.android)
       }
     }
 
-    val nonAndroidMain by creating { dependsOn(commonMain.get()) }
-
     desktopMain.apply {
-      dependsOn(nonAndroidMain)
       dependencies {
         implementation(compose.desktop.currentOs)
         implementation(libs.kotlinx.coroutines.swing)
       }
     }
-
-    appleMain { dependsOn(nonAndroidMain) }
-    jsMain { dependsOn(nonAndroidMain) }
-    wasmJsMain { dependsOn(nonAndroidMain) }
   }
 }
 
