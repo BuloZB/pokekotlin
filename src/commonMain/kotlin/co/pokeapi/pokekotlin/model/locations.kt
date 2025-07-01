@@ -1,6 +1,6 @@
 package co.pokeapi.pokekotlin.model
 
-import co.pokeapi.pokekotlin.internal.JsOnlyExport
+import co.pokeapi.pokekotlin.internal.JsNonWasmExport
 import kotlinx.serialization.Serializable
 
 /**
@@ -15,15 +15,15 @@ import kotlinx.serialization.Serializable
  * @param areas A list of areas that can be found in this location.
  */
 @Serializable
-@JsOnlyExport
+@JsNonWasmExport
 public data class Location(
-  val id: Int,
-  val name: String,
-  val region: NamedApiResource?,
+  override val id: Int,
+  override val name: String,
+  val region: Handle.Named<Region>?,
   val names: List<Name>,
   val gameIndices: List<GenerationGameIndex>,
-  val areas: List<NamedApiResource>,
-)
+  val areas: List<Handle.Named<LocationArea>>,
+) : NamedModel
 
 /**
  * Location areas are sections of locations, such as floors in a building or cave. Each area has its
@@ -40,16 +40,16 @@ public data class Location(
  *   version specific details about the encounter.
  */
 @Serializable
-@JsOnlyExport
+@JsNonWasmExport
 public data class LocationArea(
-  val id: Int,
-  val name: String,
+  override val id: Int,
+  override val name: String,
   val gameIndex: Int,
   val encounterMethodRates: List<EncounterMethodRate>,
-  val location: NamedApiResource,
+  val location: Handle.Named<Location>,
   val names: List<Name>,
   val pokemonEncounters: List<PokemonEncounter>,
-)
+) : NamedModel
 
 /**
  * The encounter rate for a specific encounter method in a location area. See:
@@ -59,9 +59,9 @@ public data class LocationArea(
  * @param versionDetails The chance of the encounter to occur on a version of the game.
  */
 @Serializable
-@JsOnlyExport
+@JsNonWasmExport
 public data class EncounterMethodRate(
-  val encounterMethod: NamedApiResource,
+  val encounterMethod: Handle.Named<EncounterMethod>,
   val versionDetails: List<EncounterMethodRateVersionDetail>,
 )
 
@@ -73,8 +73,11 @@ public data class EncounterMethodRate(
  * @param version The version of the game in which the encounter can occur with the given chance.
  */
 @Serializable
-@JsOnlyExport
-public data class EncounterMethodRateVersionDetail(val rate: Int, val version: NamedApiResource)
+@JsNonWasmExport
+public data class EncounterMethodRateVersionDetail(
+  val rate: Int,
+  val version: Handle.Named<Version>,
+)
 
 /**
  * A Pokémon encounter in a specific location area. See: https://pokeapi.co/docs/v2#pokemonencounter
@@ -84,9 +87,9 @@ public data class EncounterMethodRateVersionDetail(val rate: Int, val version: N
  *   referenced location area.
  */
 @Serializable
-@JsOnlyExport
+@JsNonWasmExport
 public data class PokemonEncounter(
-  val pokemon: NamedApiResource,
+  val pokemon: Handle.Named<PokemonVariety>,
   val versionDetails: List<VersionEncounterDetail>,
 )
 
@@ -100,13 +103,13 @@ public data class PokemonEncounter(
  * @param pokemonEncounters A list of Pokémon encountered in this pal park area along with details.
  */
 @Serializable
-@JsOnlyExport
+@JsNonWasmExport
 public data class PalParkArea(
-  val id: Int,
-  val name: String,
+  override val id: Int,
+  override val name: String,
   val names: List<Name>,
   val pokemonEncounters: List<PalParkEncounterSpecies>,
-)
+) : NamedModel
 
 /**
  * A Pokémon species that can be encountered in a specific Pal Park area. See:
@@ -117,11 +120,11 @@ public data class PalParkArea(
  * @param pokemonSpecies The Pokémon species being encountered.
  */
 @Serializable
-@JsOnlyExport
+@JsNonWasmExport
 public data class PalParkEncounterSpecies(
   val baseScore: Int,
   val rate: Int,
-  val pokemonSpecies: NamedApiResource,
+  val pokemonSpecies: Handle.Named<PokemonSpecies>,
 )
 
 /**
@@ -138,13 +141,13 @@ public data class PalParkEncounterSpecies(
  * @param versionGroups A list of version groups where this region can be visited.
  */
 @Serializable
-@JsOnlyExport
+@JsNonWasmExport
 public data class Region(
-  val id: Int,
-  val name: String,
-  val locations: List<NamedApiResource>,
-  val mainGeneration: NamedApiResource?,
+  override val id: Int,
+  override val name: String,
+  val locations: List<Handle.Named<Location>>,
+  val mainGeneration: Handle.Named<Generation>?,
   val names: List<Name>,
-  val pokedexes: List<NamedApiResource>,
-  val versionGroups: List<NamedApiResource>,
-)
+  val pokedexes: List<Handle.Named<Pokedex>>,
+  val versionGroups: List<Handle.Named<VersionGroup>>,
+) : NamedModel

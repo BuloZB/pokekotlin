@@ -1,6 +1,6 @@
 package co.pokeapi.pokekotlin.model
 
-import co.pokeapi.pokekotlin.internal.JsOnlyExport
+import co.pokeapi.pokekotlin.internal.JsNonWasmExport
 import kotlinx.serialization.Serializable
 
 /**
@@ -16,15 +16,15 @@ import kotlinx.serialization.Serializable
  * @param names The localized names for this language resource.
  */
 @Serializable
-@JsOnlyExport
+@JsNonWasmExport
 public data class Language(
-  val id: Int,
-  val name: String,
+  override val id: Int,
+  override val name: String,
   val official: Boolean,
   val iso639: String,
   val iso3166: String,
   val names: List<Name>,
-)
+) : NamedModel
 
 /**
  * The localized description for an API resource in a specific language. See:
@@ -34,8 +34,8 @@ public data class Language(
  * @param language The language this description is in.
  */
 @Serializable
-@JsOnlyExport
-public data class Description(val description: String, val language: NamedApiResource)
+@JsNonWasmExport
+public data class Description(val description: String, val language: Handle.Named<Language>)
 
 /**
  * The localized effect text for an API resource in a specific language. See:
@@ -45,8 +45,8 @@ public data class Description(val description: String, val language: NamedApiRes
  * @param language The language this effect is in.
  */
 @Serializable
-@JsOnlyExport
-public data class Effect(val effect: String, val language: NamedApiResource)
+@JsNonWasmExport
+public data class Effect(val effect: String, val language: Handle.Named<Language>)
 
 /**
  * Encounter details for a Pokémon in a specific location area. See:
@@ -59,13 +59,13 @@ public data class Effect(val effect: String, val language: NamedApiResource)
  * @param method The method by which the encounter happens.
  */
 @Serializable
-@JsOnlyExport
+@JsNonWasmExport
 public data class Encounter(
   val minLevel: Int,
   val maxLevel: Int,
-  val conditionValues: List<NamedApiResource>,
+  val conditionValues: List<Handle.Named<EncounterConditionValue>>,
   val chance: Int,
-  val method: NamedApiResource,
+  val method: Handle.Named<EncounterMethod>,
 )
 
 /**
@@ -76,8 +76,8 @@ public data class Encounter(
  * @param language The language this flavor text is in.
  */
 @Serializable
-@JsOnlyExport
-public data class FlavorText(val flavorText: String, val language: NamedApiResource)
+@JsNonWasmExport
+public data class FlavorText(val flavorText: String, val language: Handle.Named<Language>)
 
 /**
  * Generation game index for a resource. See: https://pokeapi.co/docs/v2#generationgameindex
@@ -86,8 +86,8 @@ public data class FlavorText(val flavorText: String, val language: NamedApiResou
  * @param generation The generation relevant to this game index.
  */
 @Serializable
-@JsOnlyExport
-public data class GenerationGameIndex(val gameIndex: Int, val generation: NamedApiResource)
+@JsNonWasmExport
+public data class GenerationGameIndex(val gameIndex: Int, val generation: Handle.Named<Generation>)
 
 /**
  * Machine and version group details. See: https://pokeapi.co/docs/v2#machineversiondetail
@@ -96,10 +96,10 @@ public data class GenerationGameIndex(val gameIndex: Int, val generation: NamedA
  * @param versionGroup The version group relevant to this machine.
  */
 @Serializable
-@JsOnlyExport
+@JsNonWasmExport
 public data class MachineVersionDetail(
-  val machine: ApiResource,
-  val versionGroup: NamedApiResource,
+  val machine: Handle.Unnamed<Machine>,
+  val versionGroup: Handle.Named<VersionGroup>,
 )
 
 /**
@@ -110,8 +110,8 @@ public data class MachineVersionDetail(
  * @param language The language this name is in.
  */
 @Serializable
-@JsOnlyExport
-public data class Name(val name: String, val language: NamedApiResource)
+@JsNonWasmExport
+public data class Name(val name: String, val language: Handle.Named<Language>)
 
 /**
  * The verbose effect text for an API resource in a specific language. See:
@@ -122,11 +122,11 @@ public data class Name(val name: String, val language: NamedApiResource)
  * @param language The language this effect is in.
  */
 @Serializable
-@JsOnlyExport
+@JsNonWasmExport
 public data class VerboseEffect(
   val effect: String,
   val shortEffect: String,
-  val language: NamedApiResource,
+  val language: Handle.Named<Language>,
 )
 
 /**
@@ -138,9 +138,9 @@ public data class VerboseEffect(
  * @param encounterDetails A list of encounters and their specifics.
  */
 @Serializable
-@JsOnlyExport
+@JsNonWasmExport
 public data class VersionEncounterDetail(
-  val version: NamedApiResource,
+  val version: Handle.Named<Version>,
   val maxChance: Int,
   val encounterDetails: List<Encounter>,
 )
@@ -152,8 +152,8 @@ public data class VersionEncounterDetail(
  * @param version The version relevant to this game index.
  */
 @Serializable
-@JsOnlyExport
-public data class VersionGameIndex(val gameIndex: Int, val version: NamedApiResource)
+@JsNonWasmExport
+public data class VersionGameIndex(val gameIndex: Int, val version: Handle.Named<Version>)
 
 /**
  * The localized flavor text for a version group. See:
@@ -164,9 +164,9 @@ public data class VersionGameIndex(val gameIndex: Int, val version: NamedApiReso
  * @param versionGroup The version group which uses this flavor text.
  */
 @Serializable
-@JsOnlyExport
+@JsNonWasmExport
 public data class VersionGroupFlavorText(
   val text: String,
-  val language: NamedApiResource,
-  val versionGroup: NamedApiResource,
+  val language: Handle.Named<Language>,
+  val versionGroup: Handle.Named<VersionGroup>,
 )

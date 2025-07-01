@@ -1,6 +1,6 @@
 package co.pokeapi.pokekotlin.model
 
-import co.pokeapi.pokekotlin.internal.JsOnlyExport
+import co.pokeapi.pokekotlin.internal.JsNonWasmExport
 import kotlinx.serialization.Serializable
 
 /**
@@ -25,31 +25,31 @@ import kotlinx.serialization.Serializable
  * @param machines A list of the machines related to this item.
  */
 @Serializable
-@JsOnlyExport
+@JsNonWasmExport
 public data class Item(
-  val id: Int,
-  val name: String,
+  override val id: Int,
+  override val name: String,
   val cost: Int,
   val flingPower: Int?,
-  val flingEffect: NamedApiResource?,
-  val attributes: List<NamedApiResource>,
-  val category: NamedApiResource,
+  val flingEffect: Handle.Named<ItemFlingEffect>?,
+  val attributes: List<Handle.Named<ItemAttribute>>,
+  val category: Handle.Named<ItemCategory>,
   val effectEntries: List<VerboseEffect>,
   val flavorTextEntries: List<VersionGroupFlavorText>,
   val gameIndices: List<GenerationGameIndex>,
   val names: List<Name>,
   val heldByPokemon: List<ItemHolderPokemon>,
-  val babyTriggerFor: ApiResource?,
+  val babyTriggerFor: Handle.Unnamed<EvolutionChain>?,
   val sprites: ItemSprites,
   val machines: List<MachineVersionDetail>,
-)
+) : NamedModel
 
 /**
  * The sprites used to depict an item in the game. See: https://pokeapi.co/docs/v2#itemsprites
  *
  * @param default The default depiction of this item.
  */
-@Serializable @JsOnlyExport public data class ItemSprites(val default: String?)
+@Serializable @JsNonWasmExport public data class ItemSprites(val default: String?)
 
 /**
  * A Pokémon that may be found in the wild holding an item. See:
@@ -59,9 +59,9 @@ public data class Item(
  * @param versionDetails The details for the version that this item is held in by the Pokémon.
  */
 @Serializable
-@JsOnlyExport
+@JsNonWasmExport
 public data class ItemHolderPokemon(
-  val pokemon: NamedApiResource,
+  val pokemon: Handle.Named<PokemonVariety>,
   val versionDetails: List<ItemHolderPokemonVersionDetail>,
 )
 
@@ -73,8 +73,11 @@ public data class ItemHolderPokemon(
  * @param version The version in which the Pokémon holds the item.
  */
 @Serializable
-@JsOnlyExport
-public data class ItemHolderPokemonVersionDetail(val rarity: Int, val version: NamedApiResource)
+@JsNonWasmExport
+public data class ItemHolderPokemonVersionDetail(
+  val rarity: Int,
+  val version: Handle.Named<Version>,
+)
 
 /**
  * Natural attributes of items, such as being countable or being usable in battle. See:
@@ -87,14 +90,14 @@ public data class ItemHolderPokemonVersionDetail(val rarity: Int, val version: N
  * @param descriptions The description of this resource listed in different languages.
  */
 @Serializable
-@JsOnlyExport
+@JsNonWasmExport
 public data class ItemAttribute(
-  val id: Int,
-  val name: String,
-  val items: List<NamedApiResource>,
+  override val id: Int,
+  override val name: String,
+  val items: List<Handle.Named<Item>>,
   val names: List<Name>,
   val descriptions: List<Description>,
-)
+) : NamedModel
 
 /**
  * Item categories determine where items will be placed in the players bag. See:
@@ -107,14 +110,14 @@ public data class ItemAttribute(
  * @param pocket The pocket items in this category are put into.
  */
 @Serializable
-@JsOnlyExport
+@JsNonWasmExport
 public data class ItemCategory(
-  val id: Int,
-  val name: String,
-  val items: List<NamedApiResource>,
+  override val id: Int,
+  override val name: String,
+  val items: List<Handle.Named<Item>>,
   val names: List<Name>,
-  val pocket: NamedApiResource,
-)
+  val pocket: Handle.Named<ItemPocket>,
+) : NamedModel
 
 /**
  * The various effects of the move "Fling" when used with different items. See:
@@ -126,13 +129,13 @@ public data class ItemCategory(
  * @param items A list of items that have this fling effect.
  */
 @Serializable
-@JsOnlyExport
+@JsNonWasmExport
 public data class ItemFlingEffect(
-  val id: Int,
-  val name: String,
+  override val id: Int,
+  override val name: String,
   val effectEntries: List<Effect>,
-  val items: List<NamedApiResource>,
-)
+  val items: List<Handle.Named<Item>>,
+) : NamedModel
 
 /**
  * Pockets within the players bag used for storing items by category. See:
@@ -144,10 +147,10 @@ public data class ItemFlingEffect(
  * @param names The name of this resource listed in different languages.
  */
 @Serializable
-@JsOnlyExport
+@JsNonWasmExport
 public data class ItemPocket(
-  val id: Int,
-  val name: String,
-  val categories: List<NamedApiResource>,
+  override val id: Int,
+  override val name: String,
+  val categories: List<Handle.Named<ItemCategory>>,
   val names: List<Name>,
-)
+) : NamedModel

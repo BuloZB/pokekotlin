@@ -1,6 +1,6 @@
 package co.pokeapi.pokekotlin.model
 
-import co.pokeapi.pokekotlin.internal.JsOnlyExport
+import co.pokeapi.pokekotlin.internal.JsNonWasmExport
 import kotlinx.serialization.Serializable
 
 /**
@@ -15,12 +15,12 @@ import kotlinx.serialization.Serializable
  *   the chain.
  */
 @Serializable
-@JsOnlyExport
+@JsNonWasmExport
 public data class EvolutionChain(
-  val id: Int,
-  val babyTriggerItem: NamedApiResource?,
+  override val id: Int,
+  val babyTriggerItem: Handle.Named<Item>?,
   val chain: ChainLink,
-)
+) : Model
 
 /**
  * A single link within an evolution chain. Each link represents a Pokémon species and the
@@ -33,10 +33,10 @@ public data class EvolutionChain(
  * @param evolvesTo A list of chain objects describing further evolutions from this species.
  */
 @Serializable
-@JsOnlyExport
+@JsNonWasmExport
 public data class ChainLink(
   val isBaby: Boolean,
-  val species: NamedApiResource,
+  val species: Handle.Named<PokemonSpecies>,
   val evolutionDetails: List<EvolutionDetail>,
   val evolvesTo: List<ChainLink>,
 )
@@ -69,24 +69,24 @@ public data class ChainLink(
  *   levels up.
  */
 @Serializable
-@JsOnlyExport
+@JsNonWasmExport
 public data class EvolutionDetail(
-  val trigger: NamedApiResource,
-  val item: NamedApiResource? = null,
+  val trigger: Handle.Named<EvolutionTrigger>,
+  val item: Handle.Named<Item>? = null,
   val gender: Int? = null,
-  val heldItem: NamedApiResource? = null,
-  val knownMove: NamedApiResource? = null,
-  val knownMoveType: NamedApiResource? = null,
-  val location: NamedApiResource? = null,
+  val heldItem: Handle.Named<Item>? = null,
+  val knownMove: Handle.Named<Move>? = null,
+  val knownMoveType: Handle.Named<Type>? = null,
+  val location: Handle.Named<Location>? = null,
   val minLevel: Int? = null,
   val minHappiness: Int? = null,
   val minBeauty: Int? = null,
   val minAffection: Int? = null,
-  val partySpecies: NamedApiResource? = null,
-  val partyType: NamedApiResource? = null,
+  val partySpecies: Handle.Named<PokemonSpecies>? = null,
+  val partyType: Handle.Named<Type>? = null,
   val relativePhysicalStats: Int? = null,
   val timeOfDay: String = "",
-  val tradeSpecies: NamedApiResource? = null,
+  val tradeSpecies: Handle.Named<PokemonSpecies>? = null,
   val needsOverworldRain: Boolean = false,
   val turnUpsideDown: Boolean = false,
 )
@@ -101,10 +101,10 @@ public data class EvolutionDetail(
  * @param pokemonSpecies A list of pokemon species that result from this evolution trigger.
  */
 @Serializable
-@JsOnlyExport
+@JsNonWasmExport
 public data class EvolutionTrigger(
-  val id: Int,
-  val name: String,
+  override val id: Int,
+  override val name: String,
   val names: List<Name>,
-  val pokemonSpecies: List<NamedApiResource>,
-)
+  val pokemonSpecies: List<Handle.Named<PokemonSpecies>>,
+) : NamedModel

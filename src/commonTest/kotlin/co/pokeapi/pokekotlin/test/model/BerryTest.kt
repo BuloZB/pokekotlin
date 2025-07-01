@@ -1,8 +1,8 @@
 package co.pokeapi.pokekotlin.test.model
 
 import co.pokeapi.pokekotlin.model.FlavorBerryMap
+import co.pokeapi.pokekotlin.model.Handle
 import co.pokeapi.pokekotlin.model.Name
-import co.pokeapi.pokekotlin.model.NamedApiResource
 import co.pokeapi.pokekotlin.test.LocalPokeApi
 import kotlin.test.Test
 import kotlin.test.assertContains
@@ -23,10 +23,10 @@ class BerryTest {
       assertEquals(280, size)
       assertEquals(35, smoothness)
       assertEquals(8, soilDryness)
-      assertEquals(NamedApiResource("hard", "berry-firmness", 3), firmness)
+      assertEquals(Handle.of(3, "hard"), firmness)
       assertNotEquals(0, flavors.size)
-      assertEquals(NamedApiResource("durin-berry", "item", 159), item)
-      assertEquals(NamedApiResource("water", "type", 11), naturalGiftType)
+      assertEquals(Handle.of(159, "durin-berry"), item)
+      assertEquals(Handle.of(11, "water"), naturalGiftType)
     }
   }
 
@@ -35,8 +35,8 @@ class BerryTest {
     LocalPokeApi.getBerryFirmness(3).apply {
       assertEquals(3, id)
       assertEquals("hard", name)
-      assertContains(berries, NamedApiResource("rawst", "berry", 4))
-      assertContains(names, Name(name = "Hard", language = NamedApiResource("en", "language", 9)))
+      assertContains(berries, Handle.of(4, "rawst"))
+      assertContains(names, Name(name = "Hard", language = Handle.of(9, "en")))
     }
   }
 
@@ -45,12 +45,9 @@ class BerryTest {
     LocalPokeApi.getBerryFlavor(3).apply {
       assertEquals(3, id)
       assertEquals("sweet", name)
-      assertEquals(NamedApiResource("cute", "contest-type", 3), contestType)
-      assertContains(
-        berries,
-        FlavorBerryMap(potency = 10, berry = NamedApiResource("leppa", "berry", 6)),
-      )
-      assertContains(names, Name(name = "Sweet", language = NamedApiResource("en", "language", 9)))
+      assertEquals(Handle.of(3, "cute"), contestType)
+      assertContains(berries, FlavorBerryMap(potency = 10, berry = Handle.of(6, "leppa")))
+      assertContains(names, Name(name = "Sweet", language = Handle.of(9, "en")))
     }
   }
 }

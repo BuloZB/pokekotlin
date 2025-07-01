@@ -1,6 +1,6 @@
 package co.pokeapi.pokekotlin.model
 
-import co.pokeapi.pokekotlin.internal.JsOnlyExport
+import co.pokeapi.pokekotlin.internal.JsNonWasmExport
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -38,33 +38,33 @@ import kotlinx.serialization.Serializable
  * @param flavorTextEntries The flavor text of this move listed in different languages.
  */
 @Serializable
-@JsOnlyExport
+@JsNonWasmExport
 public data class Move(
-  val id: Int,
-  val name: String,
+  override val id: Int,
+  override val name: String,
   val accuracy: Int?,
   val effectChance: Int?,
   val pp: Int?,
   val priority: Int,
   val power: Int?,
   val contestCombos: ContestComboSets?,
-  val contestType: NamedApiResource?,
-  val contestEffect: ApiResource?,
-  val superContestEffect: ApiResource?,
-  val damageClass: NamedApiResource,
+  val contestType: Handle.Named<ContestType>?,
+  val contestEffect: Handle.Unnamed<ContestEffect>?,
+  val superContestEffect: Handle.Unnamed<SuperContestEffect>?,
+  val damageClass: Handle.Named<MoveDamageClass>,
   val effectEntries: List<VerboseEffect>,
   val effectChanges: List<AbilityEffectChange>,
-  val generation: NamedApiResource,
-  val learnedByPokemon: List<NamedApiResource>,
+  val generation: Handle.Named<Generation>,
+  val learnedByPokemon: List<Handle.Named<PokemonVariety>>,
   val meta: MoveMetaData?,
   val names: List<Name>,
   val pastValues: List<PastMoveStatValues>,
   val statChanges: List<MoveStatChange>,
-  val target: NamedApiResource,
-  val type: NamedApiResource,
+  val target: Handle.Named<MoveTarget>,
+  val type: Handle.Named<Type>,
   val machines: List<MachineVersionDetail>,
   val flavorTextEntries: List<MoveFlavorText>,
-)
+) : NamedModel
 
 /**
  * Information about normal and super contest combos for moves. See:
@@ -74,7 +74,7 @@ public data class Move(
  * @param superSet The super contest combo detail.
  */
 @Serializable
-@JsOnlyExport
+@JsNonWasmExport
 public data class ContestComboSets(
   @SerialName("normal") val normalSet: ContestComboDetail,
   @SerialName("super") val superSet: ContestComboDetail,
@@ -88,10 +88,10 @@ public data class ContestComboSets(
  * @param useAfter A list of moves that can be used after this move.
  */
 @Serializable
-@JsOnlyExport
+@JsNonWasmExport
 public data class ContestComboDetail(
-  val useBefore: List<NamedApiResource>?,
-  val useAfter: List<NamedApiResource>?,
+  val useBefore: List<Handle.Named<Move>>?,
+  val useAfter: List<Handle.Named<Move>>?,
 )
 
 /**
@@ -113,10 +113,10 @@ public data class ContestComboDetail(
  * @param statChance The likelihood this attack will cause a stat change in the target Pokémon.
  */
 @Serializable
-@JsOnlyExport
+@JsNonWasmExport
 public data class MoveMetaData(
-  val ailment: NamedApiResource,
-  val category: NamedApiResource,
+  val ailment: Handle.Named<MoveAilment>,
+  val category: Handle.Named<MoveCategory>,
   val minHits: Int?,
   val maxHits: Int?,
   val minTurns: Int?,
@@ -136,8 +136,8 @@ public data class MoveMetaData(
  * @param stat The stat being affected.
  */
 @Serializable
-@JsOnlyExport
-public data class MoveStatChange(val change: Int, val stat: NamedApiResource)
+@JsNonWasmExport
+public data class MoveStatChange(val change: Int, val stat: Handle.Named<Stat>)
 
 /**
  * The stat values of a move in previous versions of the games. See:
@@ -152,15 +152,15 @@ public data class MoveStatChange(val change: Int, val stat: NamedApiResource)
  * @param versionGroup The version group in which these move stat values were in effect.
  */
 @Serializable
-@JsOnlyExport
+@JsNonWasmExport
 public data class PastMoveStatValues(
   val accuracy: Int?,
   val effectChance: Int?,
   val power: Int?,
   val pp: Int?,
   val effectEntries: List<VerboseEffect>,
-  val type: NamedApiResource?,
-  val versionGroup: NamedApiResource,
+  val type: Handle.Named<Type>?,
+  val versionGroup: Handle.Named<VersionGroup>,
 )
 
 /**
@@ -173,13 +173,13 @@ public data class PastMoveStatValues(
  * @param names The name of this resource listed in different languages.
  */
 @Serializable
-@JsOnlyExport
+@JsNonWasmExport
 public data class MoveAilment(
-  val id: Int,
-  val name: String,
-  val moves: List<NamedApiResource>,
+  override val id: Int,
+  override val name: String,
+  val moves: List<Handle.Named<Move>>,
   val names: List<Name>,
-)
+) : NamedModel
 
 /**
  * Styles of moves when used in the Battle Palace. See the bulbapedia article for greater detail.
@@ -190,8 +190,12 @@ public data class MoveAilment(
  * @param names The name of this resource listed in different languages.
  */
 @Serializable
-@JsOnlyExport
-public data class MoveBattleStyle(val id: Int, val name: String, val names: List<Name>)
+@JsNonWasmExport
+public data class MoveBattleStyle(
+  override val id: Int,
+  override val name: String,
+  val names: List<Name>,
+) : NamedModel
 
 /**
  * Very general categories that loosely group move effects. See:
@@ -203,13 +207,13 @@ public data class MoveBattleStyle(val id: Int, val name: String, val names: List
  * @param descriptions The description of this resource listed in different languages.
  */
 @Serializable
-@JsOnlyExport
+@JsNonWasmExport
 public data class MoveCategory(
-  val id: Int,
-  val name: String,
-  val moves: List<NamedApiResource>,
+  override val id: Int,
+  override val name: String,
+  val moves: List<Handle.Named<Move>>,
   val descriptions: List<Description>,
-)
+) : NamedModel
 
 /**
  * Damage classes moves can have, e.g. physical, special, or non-damaging. See:
@@ -222,14 +226,14 @@ public data class MoveCategory(
  * @param names The name of this resource listed in different languages.
  */
 @Serializable
-@JsOnlyExport
+@JsNonWasmExport
 public data class MoveDamageClass(
-  val id: Int,
-  val name: String,
+  override val id: Int,
+  override val name: String,
   val descriptions: List<Description>,
-  val moves: List<NamedApiResource>,
+  val moves: List<Handle.Named<Move>>,
   val names: List<Name>,
-)
+) : NamedModel
 
 /**
  * Methods by which Pokémon can learn moves. See: https://pokeapi.co/docs/v2#move-learn-methods
@@ -241,14 +245,14 @@ public data class MoveDamageClass(
  * @param versionGroups A list of version groups where this learn method is available.
  */
 @Serializable
-@JsOnlyExport
+@JsNonWasmExport
 public data class MoveLearnMethod(
-  val id: Int,
-  val name: String,
+  override val id: Int,
+  override val name: String,
   val descriptions: List<Description>,
   val names: List<Name>,
-  val versionGroups: List<NamedApiResource>,
-)
+  val versionGroups: List<Handle.Named<VersionGroup>>,
+) : NamedModel
 
 /**
  * Information about different types of targets that moves can be directed at during battle. Targets
@@ -261,14 +265,14 @@ public data class MoveLearnMethod(
  * @param names The name of this resource listed in different languages.
  */
 @Serializable
-@JsOnlyExport
+@JsNonWasmExport
 public data class MoveTarget(
-  val id: Int,
-  val name: String,
+  override val id: Int,
+  override val name: String,
   val descriptions: List<Description>,
-  val moves: List<NamedApiResource>,
+  val moves: List<Handle.Named<Move>>,
   val names: List<Name>,
-)
+) : NamedModel
 
 /**
  * The flavor text of a move listed in different languages and version groups. See:
@@ -279,9 +283,9 @@ public data class MoveTarget(
  * @param versionGroup The version group that uses this flavor text.
  */
 @Serializable
-@JsOnlyExport
+@JsNonWasmExport
 public data class MoveFlavorText(
   val flavorText: String,
-  val language: NamedApiResource,
-  val versionGroup: NamedApiResource,
+  val language: Handle.Named<Language>,
+  val versionGroup: Handle.Named<VersionGroup>,
 )

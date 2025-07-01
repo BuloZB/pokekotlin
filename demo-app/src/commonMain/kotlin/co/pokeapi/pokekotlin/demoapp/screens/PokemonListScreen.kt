@@ -21,7 +21,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import co.pokeapi.pokekotlin.PokeApi
 import co.pokeapi.pokekotlin.demoapp.util.ioDispatcher
-import co.pokeapi.pokekotlin.model.NamedApiResource
+import co.pokeapi.pokekotlin.model.Handle
 import co.pokeapi.pokekotlin.model.PokemonVariety
 import coil3.compose.AsyncImage
 import kotlinx.coroutines.launch
@@ -36,13 +36,13 @@ sealed interface LoadingStatus<out T> {
   data object Loading : LoadingStatus<Nothing>
 }
 
-typealias PokemonListStatus = LoadingStatus<List<NamedApiResource>>
+typealias PokemonListStatus = LoadingStatus<List<Handle.Named<PokemonVariety>>>
 
 typealias PokemonListItemStatus = LoadingStatus<PokemonVariety>
 
 class PokemonListScreenViewModel(private val api: PokeApi) : ViewModel() {
   val summaries = mutableStateOf<PokemonListStatus>(LoadingStatus.Loading)
-  val details = mutableStateMapOf<NamedApiResource, PokemonListItemStatus>()
+  val details = mutableStateMapOf<Handle<PokemonVariety>, PokemonListItemStatus>()
 
   init {
     loadPokemonList()
@@ -65,7 +65,7 @@ class PokemonListScreenViewModel(private val api: PokeApi) : ViewModel() {
     }
   }
 
-  fun loadPokemonDetails(pokemon: NamedApiResource) {
+  fun loadPokemonDetails(pokemon: Handle<PokemonVariety>) {
     if (details[pokemon] == LoadingStatus.Loading || details[pokemon] is LoadingStatus.Success)
       return // Already loading or loaded
 
@@ -127,7 +127,10 @@ fun PokemonListScreen(viewModel: PokemonListScreenViewModel = koinViewModel()) {
 }
 
 @Composable
-private fun PokemonListItem(viewModel: PokemonListScreenViewModel, item: NamedApiResource) {
+private fun PokemonListItem(
+  viewModel: PokemonListScreenViewModel,
+  item: Handle.Named<PokemonVariety>,
+) {
   LaunchedEffect(item) { viewModel.loadPokemonDetails(item) }
 
   Card(modifier = Modifier.padding(8.dp).fillMaxWidth()) {

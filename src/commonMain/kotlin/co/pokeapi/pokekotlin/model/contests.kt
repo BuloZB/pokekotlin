@@ -1,6 +1,6 @@
 package co.pokeapi.pokekotlin.model
 
-import co.pokeapi.pokekotlin.internal.JsOnlyExport
+import co.pokeapi.pokekotlin.internal.JsNonWasmExport
 import kotlinx.serialization.Serializable
 
 /**
@@ -13,13 +13,13 @@ import kotlinx.serialization.Serializable
  * @param names The name of this resource listed in different languages and colors.
  */
 @Serializable
-@JsOnlyExport
+@JsNonWasmExport
 public data class ContestType(
-  val id: Int,
-  val name: String,
-  val berryFlavor: NamedApiResource,
+  override val id: Int,
+  override val name: String,
+  val berryFlavor: Handle.Named<BerryFlavor>,
   val names: List<ContestName>,
-)
+) : NamedModel
 
 /**
  * The name of a contest type listed in different languages and colors. See:
@@ -30,8 +30,12 @@ public data class ContestType(
  * @param language The language that this name is in.
  */
 @Serializable
-@JsOnlyExport
-public data class ContestName(val name: String, val color: String, val language: NamedApiResource)
+@JsNonWasmExport
+public data class ContestName(
+  val name: String,
+  val color: String,
+  val language: Handle.Named<Language>,
+)
 
 /**
  * Contest effects refer to the effects of moves when used in contests. See:
@@ -44,14 +48,14 @@ public data class ContestName(val name: String, val color: String, val language:
  * @param flavorTextEntries The flavor text of this contest effect listed in different languages.
  */
 @Serializable
-@JsOnlyExport
+@JsNonWasmExport
 public data class ContestEffect(
-  val id: Int,
+  override val id: Int,
   val appeal: Int,
   val jam: Int,
   val effectEntries: List<Effect>,
   val flavorTextEntries: List<FlavorText>,
-)
+) : Model
 
 /**
  * Super contest effects refer to the effects of moves when used in super contests. See:
@@ -64,10 +68,10 @@ public data class ContestEffect(
  * @param moves A list of moves that have this super contest effect.
  */
 @Serializable
-@JsOnlyExport
+@JsNonWasmExport
 public data class SuperContestEffect(
-  val id: Int,
+  override val id: Int,
   val appeal: Int,
   val flavorTextEntries: List<FlavorText>,
-  val moves: List<NamedApiResource>,
-)
+  val moves: List<Handle.Named<Move>>,
+) : Model

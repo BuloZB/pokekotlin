@@ -2,8 +2,9 @@ package co.pokeapi.pokekotlin.test
 
 import co.pokeapi.pokekotlin.PokeApi
 import co.pokeapi.pokekotlin.internal.PokeApiJson
-import co.pokeapi.pokekotlin.model.ApiResourceList
-import co.pokeapi.pokekotlin.model.NamedApiResourceList
+import co.pokeapi.pokekotlin.model.Model
+import co.pokeapi.pokekotlin.model.NamedModel
+import co.pokeapi.pokekotlin.model.PaginatedList
 import io.ktor.client.plugins.api.*
 import io.ktor.client.statement.*
 import io.ktor.utils.io.*
@@ -20,16 +21,18 @@ private val OffsetLimitPlugin =
       val endIndex = offset + limit
 
       when (requestedType.type) {
-        ApiResourceList::class -> {
-          val fullList = PokeApiJson.decodeFromSource<ApiResourceList>(content.readBuffer())
+        PaginatedList.Unnamed::class -> {
+          val fullList =
+            PokeApiJson.decodeFromSource<PaginatedList.Unnamed<Model>>(content.readBuffer())
           fullList.copy(
             results = fullList.results.subList(offset, min(endIndex, fullList.count)),
             previous = if (offset == 0) null else "TODO",
             next = if (endIndex < fullList.count) "TODO" else null,
           )
         }
-        NamedApiResourceList::class -> {
-          val fullList = PokeApiJson.decodeFromSource<NamedApiResourceList>(content.readBuffer())
+        PaginatedList.Named::class -> {
+          val fullList =
+            PokeApiJson.decodeFromSource<PaginatedList.Named<NamedModel>>(content.readBuffer())
           fullList.copy(
             results = fullList.results.subList(offset, min(endIndex, fullList.count)),
             previous = if (offset == 0) null else "TODO",

@@ -1,6 +1,6 @@
 package co.pokeapi.pokekotlin.model
 
-import co.pokeapi.pokekotlin.internal.JsOnlyExport
+import co.pokeapi.pokekotlin.internal.JsNonWasmExport
 import kotlinx.serialization.Serializable
 
 /**
@@ -19,18 +19,18 @@ import kotlinx.serialization.Serializable
  * @param versionGroups A list of version groups that were introduced in this generation.
  */
 @Serializable
-@JsOnlyExport
+@JsNonWasmExport
 public data class Generation(
-  val id: Int,
-  val name: String,
-  val abilities: List<NamedApiResource>,
+  override val id: Int,
+  override val name: String,
+  val abilities: List<Handle.Named<Ability>>,
   val names: List<Name>,
-  val mainRegion: NamedApiResource,
-  val moves: List<NamedApiResource>,
-  val pokemonSpecies: List<NamedApiResource>,
-  val types: List<NamedApiResource>,
-  val versionGroups: List<NamedApiResource>,
-)
+  val mainRegion: Handle.Named<Region>,
+  val moves: List<Handle.Named<Move>>,
+  val pokemonSpecies: List<Handle.Named<PokemonSpecies>>,
+  val types: List<Handle.Named<Type>>,
+  val versionGroups: List<Handle.Named<VersionGroup>>,
+) : NamedModel
 
 /**
  * A Pokédex is a handheld electronic encyclopedia device; one which is capable of recording and
@@ -48,17 +48,17 @@ public data class Generation(
  * @param versionGroups A list of version groups this Pokédex is relevant to.
  */
 @Serializable
-@JsOnlyExport
+@JsNonWasmExport
 public data class Pokedex(
-  val id: Int,
-  val name: String,
+  override val id: Int,
+  override val name: String,
   val isMainSeries: Boolean,
   val descriptions: List<Description>,
   val names: List<Name>,
   val pokemonEntries: List<PokemonEntry>,
-  val region: NamedApiResource?,
-  val versionGroups: List<NamedApiResource>,
-)
+  val region: Handle.Named<Region>?,
+  val versionGroups: List<Handle.Named<VersionGroup>>,
+) : NamedModel
 
 /**
  * A Pokémon species entry within a Pokédex. See: https://pokeapi.co/docs/v2#pokemonentry
@@ -67,8 +67,11 @@ public data class Pokedex(
  * @param pokemonSpecies The Pokémon species being encountered.
  */
 @Serializable
-@JsOnlyExport
-public data class PokemonEntry(val entryNumber: Int, val pokemonSpecies: NamedApiResource)
+@JsNonWasmExport
+public data class PokemonEntry(
+  val entryNumber: Int,
+  val pokemonSpecies: Handle.Named<PokemonSpecies>,
+)
 
 /**
  * Versions of the games, e.g Red, Blue or Yellow. See: https://pokeapi.co/docs/v2#versions
@@ -79,13 +82,13 @@ public data class PokemonEntry(val entryNumber: Int, val pokemonSpecies: NamedAp
  * @param versionGroup The version group this version belongs to.
  */
 @Serializable
-@JsOnlyExport
+@JsNonWasmExport
 public data class Version(
-  val id: Int,
-  val name: String,
+  override val id: Int,
+  override val name: String,
   val names: List<Name>,
-  val versionGroup: NamedApiResource,
-)
+  val versionGroup: Handle.Named<VersionGroup>,
+) : NamedModel
 
 /**
  * Version groups categorize highly similar versions of the games. See:
@@ -102,14 +105,14 @@ public data class Version(
  * @param versions The versions this version group owns.
  */
 @Serializable
-@JsOnlyExport
+@JsNonWasmExport
 public data class VersionGroup(
-  val id: Int,
-  val name: String,
+  override val id: Int,
+  override val name: String,
   val order: Int,
-  val generation: NamedApiResource,
-  val moveLearnMethods: List<NamedApiResource>,
-  val pokedexes: List<NamedApiResource>,
-  val regions: List<NamedApiResource>,
-  val versions: List<NamedApiResource>,
-)
+  val generation: Handle.Named<Generation>,
+  val moveLearnMethods: List<Handle.Named<MoveLearnMethod>>,
+  val pokedexes: List<Handle.Named<Pokedex>>,
+  val regions: List<Handle.Named<Region>>,
+  val versions: List<Handle.Named<Version>>,
+) : NamedModel

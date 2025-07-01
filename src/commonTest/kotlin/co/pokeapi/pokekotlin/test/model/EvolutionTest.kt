@@ -2,8 +2,8 @@ package co.pokeapi.pokekotlin.test.model
 
 import co.pokeapi.pokekotlin.model.ChainLink
 import co.pokeapi.pokekotlin.model.EvolutionDetail
+import co.pokeapi.pokekotlin.model.Handle
 import co.pokeapi.pokekotlin.model.Name
-import co.pokeapi.pokekotlin.model.NamedApiResource
 import co.pokeapi.pokekotlin.test.LocalPokeApi
 import kotlin.test.Test
 import kotlin.test.assertContains
@@ -21,32 +21,22 @@ class EvolutionTest {
       assertEquals(
         ChainLink(
           isBaby = false,
-          species = NamedApiResource("bulbasaur", "pokemon-species", 1),
+          species = Handle.of(1, "bulbasaur"),
           evolutionDetails = emptyList(),
           evolvesTo =
             listOf(
               ChainLink(
                 isBaby = false,
-                species = NamedApiResource("ivysaur", "pokemon-species", 2),
+                species = Handle.of(2, "ivysaur"),
                 evolutionDetails =
-                  listOf(
-                    EvolutionDetail(
-                      trigger = NamedApiResource("level-up", "evolution-trigger", 1),
-                      minLevel = 16,
-                    )
-                  ),
+                  listOf(EvolutionDetail(trigger = Handle.of(1, "level-up"), minLevel = 16)),
                 evolvesTo =
                   listOf(
                     ChainLink(
                       isBaby = false,
-                      species = NamedApiResource("venusaur", "pokemon-species", 3),
+                      species = Handle.of(3, "venusaur"),
                       evolutionDetails =
-                        listOf(
-                          EvolutionDetail(
-                            trigger = NamedApiResource("level-up", "evolution-trigger", 1),
-                            minLevel = 32,
-                          )
-                        ),
+                        listOf(EvolutionDetail(trigger = Handle.of(1, "level-up"), minLevel = 32)),
                       evolvesTo = emptyList(),
                     )
                   ),
@@ -65,8 +55,8 @@ class EvolutionTest {
         chain.evolvesTo.find {
           it.evolutionDetails.contains(
             EvolutionDetail(
-              trigger = NamedApiResource("level-up", "evolution-trigger", 1),
-              heldItem = NamedApiResource("razor-claw", "item", 303),
+              trigger = Handle.of(1, "level-up"),
+              heldItem = Handle.of(303, "razor-claw"),
               timeOfDay = "night",
             )
           )
@@ -81,10 +71,7 @@ class EvolutionTest {
       assertNotNull(
         chain.evolvesTo.find {
           it.evolutionDetails.contains(
-            EvolutionDetail(
-              trigger = NamedApiResource("use-item", "evolution-trigger", 3),
-              item = NamedApiResource("water-stone", "item", 84),
-            )
+            EvolutionDetail(trigger = Handle.of(3, "use-item"), item = Handle.of(84, "water-stone"))
           )
         }
       )
@@ -98,8 +85,8 @@ class EvolutionTest {
         chain.evolvesTo.find {
           it.evolutionDetails.contains(
             EvolutionDetail(
-              trigger = NamedApiResource("level-up", "evolution-trigger", 1),
-              location = NamedApiResource("eterna-forest", "location", 8),
+              trigger = Handle.of(1, "level-up"),
+              location = Handle.of(8, "eterna-forest"),
             )
           )
         }
@@ -114,7 +101,7 @@ class EvolutionTest {
         chain.evolvesTo.find {
           it.evolutionDetails.contains(
             EvolutionDetail(
-              trigger = NamedApiResource("level-up", "evolution-trigger", 1),
+              trigger = Handle.of(1, "level-up"),
               minHappiness = 160,
               timeOfDay = "day",
             )
@@ -131,8 +118,8 @@ class EvolutionTest {
         chain.evolvesTo.find {
           it.evolutionDetails.contains(
             EvolutionDetail(
-              trigger = NamedApiResource("level-up", "evolution-trigger", 1),
-              knownMoveType = NamedApiResource("fairy", "type", 18),
+              trigger = Handle.of(1, "level-up"),
+              knownMoveType = Handle.of(18, "fairy"),
               minAffection = 2,
             )
           )
@@ -147,8 +134,8 @@ class EvolutionTest {
       assertContains(
         chain.evolvesTo[0].evolvesTo[0].evolutionDetails,
         EvolutionDetail(
-          trigger = NamedApiResource("level-up", "evolution-trigger", 1),
-          knownMove = NamedApiResource("ancient-power", "move", 246),
+          trigger = Handle.of(1, "level-up"),
+          knownMove = Handle.of(246, "ancient-power"),
         ),
       )
     }
@@ -160,11 +147,7 @@ class EvolutionTest {
       assertNotNull(
         chain.evolvesTo.find {
           it.evolutionDetails.contains(
-            EvolutionDetail(
-              trigger = NamedApiResource("level-up", "evolution-trigger", 1),
-              gender = 1,
-              minLevel = 20,
-            )
+            EvolutionDetail(trigger = Handle.of(1, "level-up"), gender = 1, minLevel = 20)
           )
         }
       )
@@ -177,10 +160,7 @@ class EvolutionTest {
       assertNotNull(
         chain.evolvesTo.find {
           it.evolutionDetails.contains(
-            EvolutionDetail(
-              trigger = NamedApiResource("level-up", "evolution-trigger", 1),
-              minBeauty = 171,
-            )
+            EvolutionDetail(trigger = Handle.of(1, "level-up"), minBeauty = 171)
           )
         }
       )
@@ -194,9 +174,9 @@ class EvolutionTest {
         chain.evolvesTo.find {
           it.evolutionDetails.contains(
             EvolutionDetail(
-              trigger = NamedApiResource("level-up", "evolution-trigger", 1),
+              trigger = Handle.of(1, "level-up"),
               minLevel = 32,
-              partyType = NamedApiResource("dark", "type", 17),
+              partyType = Handle.of(17, "dark"),
             )
           )
         }
@@ -211,7 +191,7 @@ class EvolutionTest {
         chain.evolvesTo.find {
           it.evolutionDetails.contains(
             EvolutionDetail(
-              trigger = NamedApiResource("level-up", "evolution-trigger", 1),
+              trigger = Handle.of(1, "level-up"),
               minLevel = 20,
               relativePhysicalStats = 1,
             )
@@ -228,7 +208,7 @@ class EvolutionTest {
         chain.evolvesTo[0].evolvesTo.find {
           it.evolutionDetails.contains(
             EvolutionDetail(
-              trigger = NamedApiResource("level-up", "evolution-trigger", 1),
+              trigger = Handle.of(1, "level-up"),
               minLevel = 50,
               needsOverworldRain = true,
             )
@@ -245,7 +225,7 @@ class EvolutionTest {
         chain.evolvesTo.find {
           it.evolutionDetails.contains(
             EvolutionDetail(
-              trigger = NamedApiResource("level-up", "evolution-trigger", 1),
+              trigger = Handle.of(1, "level-up"),
               minLevel = 30,
               turnUpsideDown = true,
             )
@@ -262,8 +242,8 @@ class EvolutionTest {
         chain.evolvesTo.find {
           it.evolutionDetails.contains(
             EvolutionDetail(
-              trigger = NamedApiResource("level-up", "evolution-trigger", 1),
-              partySpecies = NamedApiResource("remoraid", "pokemon-species", 223),
+              trigger = Handle.of(1, "level-up"),
+              partySpecies = Handle.of(223, "remoraid"),
             )
           )
         }
@@ -278,8 +258,8 @@ class EvolutionTest {
         chain.evolvesTo.find {
           it.evolutionDetails.contains(
             EvolutionDetail(
-              trigger = NamedApiResource("trade", "evolution-trigger", 2),
-              tradeSpecies = NamedApiResource("karrablast", "pokemon-species", 588),
+              trigger = Handle.of(2, "trade"),
+              tradeSpecies = Handle.of(588, "karrablast"),
             )
           )
         }
@@ -290,7 +270,7 @@ class EvolutionTest {
   @Test
   fun getEvolutionChain16() = runTest {
     LocalPokeApi.getEvolutionChain(72).apply {
-      assertEquals(NamedApiResource("full-incense", "item", 293), babyTriggerItem)
+      assertEquals(Handle.of(293, "full-incense"), babyTriggerItem)
       assertEquals(true, chain.isBaby)
     }
   }
@@ -300,11 +280,8 @@ class EvolutionTest {
     LocalPokeApi.getEvolutionTrigger(1).apply {
       assertEquals(1, id)
       assertEquals("level-up", name)
-      assertContains(
-        names,
-        Name(name = "Level up", language = NamedApiResource("en", "language", 9)),
-      )
-      assertContains(pokemonSpecies, NamedApiResource("fletchinder", "pokemon-species", 662))
+      assertContains(names, Name(name = "Level up", language = Handle.of(9, "en")))
+      assertContains(pokemonSpecies, Handle.of(662, "fletchinder"))
     }
   }
 }

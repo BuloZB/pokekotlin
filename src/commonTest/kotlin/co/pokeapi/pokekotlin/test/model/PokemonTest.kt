@@ -13,8 +13,8 @@ class PokemonTest {
       assertEquals(1, id)
       assertEquals("stench", name)
       assertEquals(true, isMainSeries)
-      assertEquals(NamedApiResource("generation-iii", "generation", 3), generation)
-      assertContains(names, Name(name = "Stench", language = NamedApiResource("en", "language", 9)))
+      assertEquals(Handle.of(3, "generation-iii"), generation)
+      assertContains(names, Name(name = "Stench", language = Handle.of(9, "en")))
       assertContains(
         effectEntries,
         VerboseEffect(
@@ -25,27 +25,20 @@ class PokemonTest {
               "Overworld: The wild encounter rate is halved while this Pokémon is " +
               "first in the party.",
           shortEffect = "Has a 10% chance of making target Pokémon flinch with each hit.",
-          language = NamedApiResource("en", "language", 9),
+          language = Handle.of(9, "en"),
         ),
       )
       assertNotNull(
         effectChanges.find {
-          it.versionGroup == NamedApiResource("black-white", "version-group", 11) &&
+          it.versionGroup == Handle.of<VersionGroup>(11, "black-white") &&
             it.effectEntries.contains(
-              Effect(
-                effect = "Has no effect in battle.",
-                language = NamedApiResource("en", "language", 9),
-              )
+              Effect(effect = "Has no effect in battle.", language = Handle.of(9, "en"))
             )
         }
       )
       assertContains(
         pokemon,
-        AbilityPokemon(
-          isHidden = true,
-          slot = 3,
-          pokemon = NamedApiResource("gloom", "pokemon", 44),
-        ),
+        AbilityPokemon(isHidden = true, slot = 3, pokemon = Handle.of(44, "gloom")),
       )
     }
   }
@@ -58,7 +51,7 @@ class PokemonTest {
       assertEquals((0..6).map { it * 5 }.toList(), possibleValues)
       assertContains(
         descriptions,
-        Description(description = "Loves to eat", language = NamedApiResource("en", "language", 9)),
+        Description(description = "Loves to eat", language = Handle.of(9, "en")),
       )
     }
   }
@@ -68,11 +61,8 @@ class PokemonTest {
     LocalPokeApi.getEggGroup(1).apply {
       assertEquals(1, id)
       assertEquals("monster", name)
-      assertContains(
-        names,
-        Name(name = "Monster", language = NamedApiResource("en", "language", 9)),
-      )
-      assertContains(pokemonSpecies, NamedApiResource("avalugg", "pokemon-species", 713))
+      assertContains(names, Name(name = "Monster", language = Handle.of(9, "en")))
+      assertContains(pokemonSpecies, Handle.of(713, "avalugg"))
     }
   }
 
@@ -83,12 +73,9 @@ class PokemonTest {
       assertEquals("female", name)
       assertContains(
         pokemonSpeciesDetails,
-        PokemonSpeciesGender(
-          rate = 4,
-          pokemonSpecies = NamedApiResource("noivern", "pokemon-species", 715),
-        ),
+        PokemonSpeciesGender(rate = 4, pokemonSpecies = Handle.of(715, "noivern")),
       )
-      assertContains(requiredForEvolution, NamedApiResource("froslass", "pokemon-species", 478))
+      assertContains(requiredForEvolution, Handle.of(478, "froslass"))
     }
   }
 
@@ -98,12 +85,9 @@ class PokemonTest {
       assertEquals(1, id)
       assertEquals("slow", name)
       assertEquals("\\frac{5x^3}{4}", formula)
-      assertContains(
-        descriptions,
-        Description(description = "slow", language = NamedApiResource("en", "language", 9)),
-      )
+      assertContains(descriptions, Description(description = "slow", language = Handle.of(9, "en")))
       assertContains(levels, GrowthRateExperienceLevel(experience = 1250000, level = 100))
-      assertContains(pokemonSpecies, NamedApiResource("volcanion", "pokemon-species", 721))
+      assertContains(pokemonSpecies, Handle.of(721, "volcanion"))
     }
   }
 
@@ -112,26 +96,23 @@ class PokemonTest {
     LocalPokeApi.getNature(10).apply {
       assertEquals(10, id)
       assertEquals("hasty", name)
-      assertEquals(NamedApiResource("speed", "stat", 6), increasedStat)
-      assertEquals(NamedApiResource("defense", "stat", 3), decreasedStat)
-      assertEquals(NamedApiResource("sweet", "berry-flavor", 3), likesFlavor)
-      assertEquals(NamedApiResource("sour", "berry-flavor", 5), hatesFlavor)
+      assertEquals(Handle.of(6, "speed"), increasedStat)
+      assertEquals(Handle.of(3, "defense"), decreasedStat)
+      assertEquals(Handle.of(3, "sweet"), likesFlavor)
+      assertEquals(Handle.of(5, "sour"), hatesFlavor)
       assertContains(
         pokeathlonStatChanges,
-        NatureStatChange(
-          pokeathlonStat = NamedApiResource("speed", "pokeathlon-stat", 1),
-          maxChange = 2,
-        ),
+        NatureStatChange(pokeathlonStat = Handle.of(1, "speed"), maxChange = 2),
       )
       assertContains(
         moveBattleStylePreferences,
         MoveBattleStylePreference(
           highHpPreference = 58,
           lowHpPreference = 88,
-          moveBattleStyle = NamedApiResource("attack", "move-battle-style", 1),
+          moveBattleStyle = Handle.of(1, "attack"),
         ),
       )
-      assertContains(names, Name(name = "Hasty", language = NamedApiResource("en", "language", 9)))
+      assertContains(names, Name(name = "Hasty", language = Handle.of(9, "en")))
     }
   }
 
@@ -140,17 +121,14 @@ class PokemonTest {
     LocalPokeApi.getPokeathlonStat(1).apply {
       assertEquals(1, id)
       assertEquals("speed", name)
-      assertContains(names, Name(name = "Speed", language = NamedApiResource("en", "language", 9)))
+      assertContains(names, Name(name = "Speed", language = Handle.of(9, "en")))
       assertContains(
         affectingNatures.decrease,
-        NaturePokeathlonStatEffect(nature = NamedApiResource("sassy", "nature", 24), maxChange = -2),
+        NaturePokeathlonStatEffect(nature = Handle.of(24, "sassy"), maxChange = -2),
       )
       assertContains(
         affectingNatures.increase,
-        NaturePokeathlonStatEffect(
-          nature = NamedApiResource("serious", "nature", 25),
-          maxChange = 1,
-        ),
+        NaturePokeathlonStatEffect(nature = Handle.of(25, "serious"), maxChange = 1),
       )
     }
   }
@@ -165,37 +143,30 @@ class PokemonTest {
       assertEquals(true, isDefault)
       assertEquals(1, order)
       assertEquals(69, weight)
-      assertEquals(NamedApiResource("bulbasaur", "pokemon-species", 1), species)
+      assertEquals(Handle.of(1, "bulbasaur"), species)
       assertContains(
         abilities,
-        PokemonAbility(
-          slot = 1,
-          isHidden = false,
-          ability = NamedApiResource("overgrow", "ability", 65),
-        ),
+        PokemonAbility(slot = 1, isHidden = false, ability = Handle.of(65, "overgrow")),
       )
-      assertContains(forms, NamedApiResource("bulbasaur", "pokemon-form", 1))
+      assertContains(forms, Handle.of(1, "bulbasaur"))
       assertContains(
         gameIndices,
-        VersionGameIndex(version = NamedApiResource("white-2", "version", 22), gameIndex = 1),
+        VersionGameIndex(version = Handle.of(22, "white-2"), gameIndex = 1),
       )
       assertEquals(emptyList(), heldItems)
       assertNotNull(
         moves.find {
-          it.move == NamedApiResource("razor-wind", "move", 13) &&
+          it.move == Handle.of<Move>(13, "razor-wind") &&
             PokemonMoveVersion(
               levelLearnedAt = 0,
-              versionGroup = NamedApiResource("gold-silver", "version-group", 3),
-              moveLearnMethod = NamedApiResource("egg", "move-learn-method", 2),
+              versionGroup = Handle.of(3, "gold-silver"),
+              moveLearnMethod = Handle.of(2, "egg"),
               order = null,
             ) in it.versionGroupDetails
         }
       )
-      assertContains(
-        stats,
-        PokemonStat(effort = 0, baseStat = 45, stat = NamedApiResource("hp", "stat", 1)),
-      )
-      assertContains(types, PokemonType(slot = 1, type = NamedApiResource("grass", "type", 12)))
+      assertContains(stats, PokemonStat(effort = 0, baseStat = 45, stat = Handle.of(1, "hp")))
+      assertContains(types, PokemonType(slot = 1, type = Handle.of(12, "grass")))
     }
   }
 
@@ -204,9 +175,8 @@ class PokemonTest {
     LocalPokeApi.getPokemonVariety(12).apply {
       assertNotNull(
         heldItems.find {
-          it.item == NamedApiResource("silver-powder", "item", 199) &&
-            PokemonHeldItemVersion(version = NamedApiResource("ruby", "version", 7), rarity = 5) in
-              it.versionDetails
+          it.item == Handle.of<Item>(199, "silver-powder") &&
+            PokemonHeldItemVersion(version = Handle.of(7, "ruby"), rarity = 5) in it.versionDetails
         }
       )
     }
@@ -218,17 +188,16 @@ class PokemonTest {
       assertNotNull(
         find { locAreaEncounter ->
           locAreaEncounter.locationArea ==
-            NamedApiResource("kanto-route-2-south-towards-viridian-city", "location-area", 296) &&
+            Handle.of<LocationArea>(296, "kanto-route-2-south-towards-viridian-city") &&
             locAreaEncounter.versionDetails.find { detail ->
               detail.maxChance == 10
-              detail.version == NamedApiResource("heartgold", "version", 15)
+              detail.version == Handle.of<Version>(15, "heartgold")
               detail.encounterDetails.find { encounter ->
                 encounter.minLevel == 8 &&
                   encounter.maxLevel == 8 &&
                   encounter.chance == 5 &&
-                  encounter.method == NamedApiResource("walk", "encounter-method", 1) &&
-                  NamedApiResource("time-morning", "encounter-condition-value", 3) in
-                    encounter.conditionValues
+                  encounter.method == Handle.of<EncounterMethod>(1, "walk") &&
+                  Handle.of(3, "time-morning") in encounter.conditionValues
               } != null
             } != null
         }
@@ -257,8 +226,8 @@ class PokemonTest {
     LocalPokeApi.getPokemonColor(1).apply {
       assertEquals(1, id)
       assertEquals("black", name)
-      assertContains(names, Name(name = "Black", language = NamedApiResource("en", "language", 9)))
-      assertContains(pokemonSpecies, NamedApiResource("snorlax", "pokemon-species", 143))
+      assertContains(names, Name(name = "Black", language = Handle.of(9, "en")))
+      assertContains(pokemonSpecies, Handle.of(143, "snorlax"))
     }
   }
 
@@ -273,8 +242,8 @@ class PokemonTest {
       assertEquals(false, isBattleOnly)
       assertEquals(false, isMega)
       assertEquals("", formName)
-      assertEquals(NamedApiResource("bulbasaur", "pokemon", 1), pokemon)
-      assertEquals(NamedApiResource("red-blue", "version-group", 1), versionGroup)
+      assertEquals(Handle.of(1, "bulbasaur"), pokemon)
+      assertEquals(Handle.of(1, "red-blue"), versionGroup)
       sprites.apply {
         assertTrue(frontDefault!!.endsWith("/sprites/pokemon/1.png"))
         assertTrue(backDefault!!.endsWith("/sprites/pokemon/back/1.png"))
@@ -287,10 +256,7 @@ class PokemonTest {
   @Test
   fun getPokemonForm2() = runTest {
     LocalPokeApi.getPokemonForm(10266).apply {
-      assertContains(
-        formNames,
-        Name(name = "Original Color", language = NamedApiResource("en", "language", 9)),
-      )
+      assertContains(formNames, Name(name = "Original Color", language = Handle.of(9, "en")))
     }
   }
 
@@ -299,8 +265,8 @@ class PokemonTest {
     LocalPokeApi.getPokemonHabitat(1).apply {
       assertEquals(1, id)
       assertEquals("cave", name)
-      assertContains(names, Name(name = "cave", language = NamedApiResource("en", "language", 9)))
-      assertContains(pokemonSpecies, NamedApiResource("registeel", "pokemon-species", 379))
+      assertContains(names, Name(name = "cave", language = Handle.of(9, "en")))
+      assertContains(pokemonSpecies, Handle.of(379, "registeel"))
     }
   }
 
@@ -309,12 +275,12 @@ class PokemonTest {
     LocalPokeApi.getPokemonShape(1).apply {
       assertEquals(1, id)
       assertEquals("ball", name)
-      assertContains(names, Name(name = "Ball", language = NamedApiResource("en", "language", 9)))
+      assertContains(names, Name(name = "Ball", language = Handle.of(9, "en")))
       assertContains(
         awesomeNames,
-        AwesomeName(awesomeName = "Pomaceous", language = NamedApiResource("en", "language", 9)),
+        AwesomeName(awesomeName = "Pomaceous", language = Handle.of(9, "en")),
       )
-      assertContains(pokemonSpecies, NamedApiResource("shellder", "pokemon-species", 90))
+      assertContains(pokemonSpecies, Handle.of(90, "shellder"))
     }
   }
 
@@ -333,44 +299,28 @@ class PokemonTest {
       assertEquals(20, hatchCounter)
       assertEquals(false, hasGenderDifferences)
       assertEquals(false, formsSwitchable)
-      assertEquals(NamedApiResource("medium-slow", "growth-rate", 4), growthRate)
+      assertEquals(Handle.of(4, "medium-slow"), growthRate)
       assertContains(
         pokedexNumbers,
-        PokemonSpeciesDexEntry(
-          entryNumber = 80,
-          pokedex = NamedApiResource("kalos-central", "pokedex", 12),
-        ),
+        PokemonSpeciesDexEntry(entryNumber = 80, pokedex = Handle.of(12, "kalos-central")),
       )
-      assertContains(eggGroups, NamedApiResource("plant", "egg-group", 7))
-      assertEquals(NamedApiResource("green", "pokemon-color", 5), color)
-      assertEquals(NamedApiResource("quadruped", "pokemon-shape", 8), shape)
+      assertContains(eggGroups, Handle.of(7, "plant"))
+      assertEquals(Handle.of(5, "green"), color)
+      assertEquals(Handle.of(8, "quadruped"), shape)
       assertEquals(null, evolvesFromSpecies)
-      assertEquals(ApiResource("evolution-chain", 1), evolutionChain)
-      assertEquals(NamedApiResource("grassland", "pokemon-habitat", 3), habitat)
-      assertEquals(NamedApiResource("generation-i", "generation", 1), generation)
-      assertContains(
-        names,
-        Name(name = "Bulbasaur", language = NamedApiResource("en", "language", 9)),
-      )
+      assertEquals(Handle.of(1), evolutionChain)
+      assertEquals(Handle.of(3, "grassland"), habitat)
+      assertEquals(Handle.of(1, "generation-i"), generation)
+      assertContains(names, Name(name = "Bulbasaur", language = Handle.of(9, "en")))
       assertContains(
         palParkEncounters,
-        PalParkEncounterArea(
-          rate = 30,
-          baseScore = 50,
-          area = NamedApiResource("field", "pal-park-area", 2),
-        ),
+        PalParkEncounterArea(rate = 30, baseScore = 50, area = Handle.of(2, "field")),
       )
       assertEquals(emptyList(), formDescriptions)
-      assertContains(
-        genera,
-        Genus(genus = "Seed Pokémon", language = NamedApiResource("en", "language", 9)),
-      )
+      assertContains(genera, Genus(genus = "Seed Pokémon", language = Handle.of(9, "en")))
       assertContains(
         varieties,
-        PokemonSpeciesVariety(
-          isDefault = true,
-          variety = NamedApiResource("bulbasaur", "pokemon", 1),
-        ),
+        PokemonSpeciesVariety(isDefault = true, variety = Handle.of(1, "bulbasaur")),
       )
       assertContains(
         flavorTextEntries,
@@ -379,8 +329,8 @@ class PokemonTest {
             "Bulbasaur can be seen napping in bright sunlight.\n" +
               "There is a seed on its back. By soaking up the sun’s rays,\n" +
               "the seed grows progressively larger.",
-          language = NamedApiResource("en", "language", 9),
-          version = NamedApiResource("alpha-sapphire", "version", 26),
+          language = Handle.of(9, "en"),
+          version = Handle.of(26, "alpha-sapphire"),
         ),
       )
     }
@@ -389,7 +339,7 @@ class PokemonTest {
   @Test
   fun getPokemonSpecies2() = runTest {
     LocalPokeApi.getPokemonSpecies(2).apply {
-      assertEquals(NamedApiResource("bulbasaur", "pokemon-species", 1), evolvesFromSpecies)
+      assertEquals(Handle.of(1, "bulbasaur"), evolvesFromSpecies)
     }
   }
 
@@ -403,7 +353,7 @@ class PokemonTest {
             "Form changes along with type to match the weather in battle, " +
               "due to forecast.  Castform is always in its normal form outside of " +
               "battle, regardless of weather.",
-          language = NamedApiResource("en", "language", 9),
+          language = Handle.of(9, "en"),
         ),
       )
     }
@@ -418,16 +368,16 @@ class PokemonTest {
       assertEquals(false, isBattleOnly)
       assertContains(
         affectingMoves.increase,
-        MoveStatAffect(change = 2, move = NamedApiResource("swords-dance", "move", 14)),
+        MoveStatAffect(change = 2, move = Handle.of(14, "swords-dance")),
       )
       assertContains(
         affectingMoves.decrease,
-        MoveStatAffect(change = -1, move = NamedApiResource("growl", "move", 45)),
+        MoveStatAffect(change = -1, move = Handle.of(45, "growl")),
       )
-      assertContains(affectingNatures.increase, NamedApiResource("lonely", "nature", 6))
-      assertContains(affectingNatures.decrease, NamedApiResource("bold", "nature", 2))
-      assertEquals(NamedApiResource("physical", "move-damage-class", 2), moveDamageClass)
-      assertContains(names, Name(name = "Attack", language = NamedApiResource("en", "language", 9)))
+      assertContains(affectingNatures.increase, Handle.of(6, "lonely"))
+      assertContains(affectingNatures.decrease, Handle.of(2, "bold"))
+      assertEquals(Handle.of(2, "physical"), moveDamageClass)
+      assertContains(names, Name(name = "Attack", language = Handle.of(9, "en")))
     }
   }
 
@@ -437,27 +387,21 @@ class PokemonTest {
       assertEquals(8, id)
       assertEquals("ghost", name)
       damageRelations.apply {
-        assertContains(halfDamageFrom, NamedApiResource("poison", "type", 4))
-        assertContains(noDamageFrom, NamedApiResource("normal", "type", 1))
-        assertContains(halfDamageTo, NamedApiResource("dark", "type", 17))
-        assertContains(doubleDamageFrom, NamedApiResource("ghost", "type", 8))
-        assertContains(noDamageTo, NamedApiResource("normal", "type", 1))
-        assertContains(doubleDamageTo, NamedApiResource("psychic", "type", 14))
+        assertContains(halfDamageFrom, Handle.of(4, "poison"))
+        assertContains(noDamageFrom, Handle.of(1, "normal"))
+        assertContains(halfDamageTo, Handle.of(17, "dark"))
+        assertContains(doubleDamageFrom, Handle.of(8, "ghost"))
+        assertContains(noDamageTo, Handle.of(1, "normal"))
+        assertContains(doubleDamageTo, Handle.of(14, "psychic"))
       }
       assertContains(
         gameIndices,
-        GenerationGameIndex(
-          gameIndex = 7,
-          generation = NamedApiResource("generation-vi", "generation", 6),
-        ),
+        GenerationGameIndex(gameIndex = 7, generation = Handle.of(6, "generation-vi")),
       )
-      assertEquals(NamedApiResource("physical", "move-damage-class", 2), moveDamageClass)
-      assertContains(names, Name(name = "Ghost", language = NamedApiResource("en", "language", 9)))
-      assertContains(
-        pokemon,
-        TypePokemon(slot = 1, pokemon = NamedApiResource("litwick", "pokemon", 607)),
-      )
-      assertContains(moves, NamedApiResource("hex", "move", 506))
+      assertEquals(Handle.of(2, "physical"), moveDamageClass)
+      assertContains(names, Name(name = "Ghost", language = Handle.of(9, "en")))
+      assertContains(pokemon, TypePokemon(slot = 1, pokemon = Handle.of(607, "litwick")))
+      assertContains(moves, Handle.of(506, "hex"))
     }
   }
 }
