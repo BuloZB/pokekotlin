@@ -147,6 +147,7 @@ npmPublish {
   readme = project.file("README.npm.md")
   packages {
     named("js") {
+      scope = "pokeapi"
       packageJson {
         description = "Promise based client for PokéAPI written in Kotlin"
         keywords = setOf("pokeapi", "pokemon", "api", "kotlin")
@@ -165,7 +166,7 @@ npmPublish {
     }
   }
   registries {
-    npmjs { authToken = project.properties["npmPublishToken"]?.toString() }
+    npmjs { authToken = project.properties["npmAccessToken"]?.toString() }
     github { authToken = project.properties["GitHubPackagesPassword"]?.toString() }
   }
 }
@@ -185,7 +186,7 @@ mavenPublishing {
   signAllPublications()
   pom {
     name = "PokeKotlin"
-    description = "Kotlin client for The Pokémon API"
+    description = "Kotlin client for PokéAPI"
     url = "https://pokeapi.github.io/pokekotlin/"
     licenses {
       license {
