@@ -80,9 +80,9 @@ For JavaScript, we provide an ESM module with TypeScript typings and a
 import { PokeApi } from "@pokeapi/pokekotlin";
 
 const list = await PokeApi.Default.getPokemonSpeciesListAsync(0, 10);
-for (const handle of list.results) {
-  const species = await PokeApi.Default.getAsync(handle);
-  console.log(`Found: ${species}`);
+for (const handle of list.asJsReadonlyArrayView().results) {
+  const species = await PokeApi.Default.getPokemonSpeciesAsync(handle.id);
+  console.log(`Found: ${species.toString()}`);
 }
 ```
 

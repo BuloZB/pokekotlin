@@ -55,10 +55,10 @@ try {
   // Get a list of Pokémon species
   const list = await PokeApi.Default.getPokemonSpeciesListAsync(0, 10);
 
-  for (const handle of list.results) {
+  for (const handle of list.asJsReadonlyArrayView().results) {
     // Get each species by its handle
-    const species = await PokeApi.Default.getAsync(handle);
-    console.log(`Found: ${species}`);
+    const species = await PokeApi.Default.getPokemonSpeciesAsync(handle.id);
+    console.log(`Found: ${species.toString()}`);
   }
 } catch (error) {
   console.error(`Error: ${error.message}`);
