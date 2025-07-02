@@ -165,8 +165,8 @@ npmPublish {
     }
   }
   registries {
-    npmjs { authToken = project.property("npmPublishToken")?.toString() }
-    github { authToken = project.property("GitHubPackagesPassword")?.toString() }
+    npmjs { authToken = project.properties["npmPublishToken"]?.toString() }
+    github { authToken = project.properties["GitHubPackagesPassword"]?.toString() }
   }
 }
 
