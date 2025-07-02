@@ -3,7 +3,7 @@ name: "Release"
 
 on:
   push:
-    tags: ["v*.*.*"]
+    tags: [ "v*.*.*" ]
 
 jobs:
   publish-maven:
@@ -37,7 +37,7 @@ jobs:
       - uses: "./.github/actions/setup"
       - run: "./gradlew :publishJsPackageToNpmjsRegistry"
         env:
-          NPM_PUBLISH_REGISTRY_NPMJS_AUTHTOKEN: "${{ secrets.NPM_ACCESS_TOKEN }}"
+          ORG_GRADLE_PROJECT_npmAccessToken: "${{ secrets.NPM_ACCESS_TOKEN }}"
 
   publish-pages:
     needs:
