@@ -46,7 +46,7 @@ jobs:
         with:
           fetch-depth: 0
       - uses: "./.github/actions/setup"
-      - run: "./gradlew :publishJsPackageToNpmjsRegistry"
+      - run: "./gradlew :publishJsPackageToGithubRegistry"
         env:
           NPM_PUBLISH_REGISTRY_GITHUB_AUTHTOKEN: "${{ secrets.GITHUB_TOKEN }}"
 
