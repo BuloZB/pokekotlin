@@ -309,7 +309,7 @@ public data class NaturePokeathlonStatEffect(val maxChange: Int, val nature: Han
 public data class PokemonVariety(
   override val id: Int,
   override val name: String,
-  val baseExperience: Int,
+  val baseExperience: Int?,
   val height: Int,
   val isDefault: Boolean,
   val order: Int,
@@ -620,7 +620,7 @@ public data class PokemonPastAbility(
  */
 @Serializable
 @JsNonWasmExport
-public data class PokemonCries(val latest: String, val legacy: String?)
+public data class PokemonCries(val latest: String?, val legacy: String?)
 
 /**
  * Details about a Pokémon's encounters in a location area. See:
