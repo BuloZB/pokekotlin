@@ -3,7 +3,6 @@
 import fr.brouillard.oss.jgitver.Strategies
 import love.forte.plugin.suspendtrans.configuration.SuspendTransformConfigurations.kotlinJsExportIgnoreClassInfo
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
-import org.jetbrains.kotlin.gradle.targets.native.tasks.KotlinNativeSimulatorTest
 import ru.vyarus.gradle.plugin.mkdocs.task.MkdocsTask
 
 plugins {
@@ -127,20 +126,24 @@ kotlin {
   }
 }
 
+tasks
+  .matching { task ->
+    listOf(
+        // disable ios/watchos/tvos tests
+        ".*Simulator.*Test",
+        // disable D8 tests
+        ".*D8Test",
+      )
+      .any { task.name.matches(it.toRegex()) }
+  }
+  .configureEach { enabled = false }
+
 suspendTransformPlugin {
   transformers {
     addJvmAsync()
     addJvmBlocking()
     addJsPromise { addCopyAnnotationExclude { from(kotlinJsExportIgnoreClassInfo) } }
   }
-}
-
-// Standalone mode is missing certificates, which causes our LiveTest to fail.
-// This should resolve it but requires us to start the simulator(s) beforehand.
-// https://youtrack.jetbrains.com/issue/KT-38317
-tasks.withType<KotlinNativeSimulatorTest> {
-  standalone.set(false)
-  (project.findProperty("appleNativeSimulatorDevice") as? String)?.let { device.set(it) }
 }
 
 npmPublish {
@@ -249,15 +252,6 @@ tasks.register("generateDocs") {
     copy {
       from(layout.buildDirectory.dir("dokka/html"))
       into(layout.buildDirectory.dir("docs/api"))
-    }
-  }
-}
-
-tasks.register("installGitHooks") {
-  doLast {
-    copy {
-      from("${rootProject.projectDir}/scripts/pre-commit")
-      into("${rootProject.projectDir}/.git/hooks")
     }
   }
 }

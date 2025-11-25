@@ -17,13 +17,15 @@ experimental = true
 [hooks]
 postinstall = "hk install"
 
-[tasks.check]
-description = "Run hk checks."
-run = "hk check --all"
-
-[tasks.fix]
-description = "Run hk fixes."
-run = "hk fix --all"
-
-[tasks.test-jvm]
-run = "./gradlew jvmTest"
+[tasks]
+check = "hk check --all"
+fix = "hk fix --all"
+demo-jvm = "./gradlew :demo-app:run"
+demo-js = "./gradlew :demo-app:jsBrowserDevelopmentRun"
+demo-wasm = "./gradlew :demo-app:wasmBrowserDevelopmentRun"
+demo-macos = "./gradlew :demo-app:runDebugExecutableMacosArm64"
+demo-android = [
+  "./gradlew :demo-app:installDebug",
+  "adb shell am start -n co.pokeapi.pokekotlin.demoapp/co.pokeapi.pokekotlin.demoapp.MainActivity",
+]
+demo-ios = "echo Not Implemented - Use XCode to run && exit 1"

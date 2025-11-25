@@ -7,7 +7,7 @@ on:
 
 jobs:
   publish-maven:
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     environment:
       name: "maven-central"
       url: "https://central.sonatype.com/namespace/co.pokeapi.pokekotlin"
@@ -30,7 +30,7 @@ jobs:
             "${{ secrets.GPG_PASSPHRASE }}"
 
   publish-npm:
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     environment:
       name: "npm"
       url: "https://www.npmjs.com/package/pokekotlin"
@@ -47,7 +47,7 @@ jobs:
   publish-pages:
     needs:
       - "publish-maven"
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     permissions:
       pages: "write"
       id-token: "write"
