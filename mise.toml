@@ -1,0 +1,29 @@
+[tools]
+hk = "latest"
+java = "21"
+node = "lts"
+"npm:ktfmt" = "latest"
+prettier = "latest"
+pkl = "latest"
+actionlint = "latest"
+shellcheck = "latest"
+"npm:google-java-format" = "latest"
+"npm:http-server" = "latest"
+
+[settings]
+lockfile = true
+experimental = true
+
+[hooks]
+postinstall = "hk install"
+
+[tasks.check]
+description = "Run hk checks."
+run = "hk check --all"
+
+[tasks.fix]
+description = "Run hk fixes."
+run = "hk fix --all"
+
+[tasks.test-jvm]
+run = "./gradlew jvmTest"

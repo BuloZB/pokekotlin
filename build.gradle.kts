@@ -253,29 +253,6 @@ tasks.register("generateDocs") {
   }
 }
 
-spotless {
-  kotlinGradle {
-    target("*.gradle.kts", "demo-app/*.gradle.kts")
-    ktfmt().googleStyle()
-  }
-  kotlin {
-    target("src/**/*.kt", "demo-app/src/**/*.kt")
-    ktfmt().googleStyle()
-  }
-  java {
-    target("src/**/*.java", "demo-app/src/**/*.java")
-    googleJavaFormat()
-  }
-  format("markdown") {
-    target("*.md", "docs/**/*.md")
-    prettier(libs.versions.tool.prettier.get()).config(mapOf("proseWrap" to "always"))
-  }
-  yaml {
-    target(".github/**/*.yml")
-    prettier(libs.versions.tool.prettier.get())
-  }
-}
-
 tasks.register("installGitHooks") {
   doLast {
     copy {

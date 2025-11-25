@@ -3,7 +3,7 @@
 config.set({
   client: {
     mocha: {
-      timeout: "10min"
-    }
-  }
+      timeout: "10min",
+    },
+  },
 });

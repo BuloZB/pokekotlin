@@ -3,17 +3,6 @@ set windows-shell := ["C:\\Program Files\\Git\\bin\\sh.exe", "-c"]
 _default:
     just --list
 
-# Serve PokeAPI data from static files
-test-server:
-    ./scripts/test-server
-
-# Spawn a background job serving PokeAPI data from static files
-test-server-background:
-    ./scripts/test-server &
-
-format:
-    ./gradlew spotlessApply
-
 test-jvm:
     ./gradlew jvmTest
 

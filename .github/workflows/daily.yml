@@ -15,9 +15,13 @@ jobs:
         env:
           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
         with:
-          route: "GET /repos/${{github.repository}}/actions/workflows/daily.yml/runs?per_page=1&status=completed"
+          route:
+            "GET
+            /repos/${{github.repository}}/actions/workflows/daily.yml/runs?per_page=1&status=completed"
     outputs:
-      last_sha: "${{ fromJson(steps.check-last-run.outputs.data).workflow_runs[0].head_sha }}"
+      last_sha:
+        "${{
+        fromJson(steps.check-last-run.outputs.data).workflow_runs[0].head_sha }}"
 
   publish-maven-snapshot:
     needs: ["check-last-run"]
@@ -32,7 +36,8 @@ jobs:
       - uses: "./.github/actions/setup"
       - run: "./gradlew :publishAllPublicationsToGitHubPackagesRepository"
         env:
-          ORG_GRADLE_PROJECT_GitHubPackagesPassword: "${{ secrets.GITHUB_TOKEN }}"
+          ORG_GRADLE_PROJECT_GitHubPackagesPassword:
+            "${{ secrets.GITHUB_TOKEN }}"
           ORG_GRADLE_PROJECT_GitHubPackagesUsername: "${{ github.actor }}"
 
   publish-npm-snapshot:
@@ -48,7 +53,8 @@ jobs:
       - uses: "./.github/actions/setup"
       - run: "./gradlew :publishJsPackageToGithubRegistry"
         env:
-          ORG_GRADLE_PROJECT_GitHubPackagesPassword: "${{ secrets.GITHUB_TOKEN }}"
+          ORG_GRADLE_PROJECT_GitHubPackagesPassword:
+            "${{ secrets.GITHUB_TOKEN }}"
 
   dependency-submission:
     needs: ["check-last-run"]
