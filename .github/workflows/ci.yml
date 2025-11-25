@@ -15,7 +15,7 @@ jobs:
           fetch-depth: 0
           submodules: recursive
       - uses: "./.github/actions/setup"
-      - run: "mise run test-server"
+      - run: "mise run test-server &"
       - run: "./gradlew allTests"
 
   build-docs:
