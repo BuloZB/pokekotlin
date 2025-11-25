@@ -30,29 +30,36 @@ jobs:
         with:
           path: "build/docs"
 
-  check-format:
+  format:
     runs-on: ubuntu-latest
     permissions:
-      checks: write
-      issues: write
-      pull-requests: write
+      contents: write
     steps:
       - uses: "actions/checkout@v4"
         with:
           fetch-depth: 0
       - uses: "./.github/actions/setup"
-      - run: "./gradlew spotlessApply"
-      - if: "${{ github.event_name == 'pull_request' }}"
-        uses: reviewdog/action-suggester@v1
+      - run: mise fix
+      - run: |
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+          git diff --exit-code || (git add . && git commit -m 'Apply mise fix' && git push)
+          git diff --exit-code
+
+  check-hk:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: "actions/checkout@v4"
         with:
-          tool_name: spotless
-          cleanup: false
-      - run: "git diff --exit-code"
+          fetch-depth: 0
+      - uses: "./.github/actions/setup"
+      - run: mise check
 
   all-good:
     needs:
       - "test"
-      - "check-format"
+      - "format"
+      - "check-hk"
       - "build-docs"
     runs-on: "ubuntu-latest"
     steps:
